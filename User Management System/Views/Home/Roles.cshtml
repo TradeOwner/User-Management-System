@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = "Roles";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 50px;
+            padding: 20px;
+            border: 2px solid black;
+            border-radius: 8px;
+            background-color: whitesmoke;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        header h1 {
+            color: black;
+            font-weight: 500;
+        }
+
+        header p {
+            color: black;
+            font-weight: 300;
+        }
+
+        table {
+            width: 60%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            border-radius: 5px;
+            background-color: whitesmoke;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        th {
+            background-color: whitesmoke;
+        }
+
+        tr:nth-child(even) {
+            background-color: whitesmoke;
+        }
+
+        .form-container {
+            width: 40%;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid black;
+            border-radius: 8px;
+            background-color: whitesmoke;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .form-container input, .form-container button {
+                margin: 10px 0;
+                padding: 10px;
+                width: 70%;
+                border: 2px solid black;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+                border-radius: 5px;
+            }
+
+        input::placeholder {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Role Management</h1>
+            <p>Create and manage roles to assign different levels of access and permissions.</p>
+        </header>
+    </div>
+
+    <div class="form-container">
+        <header class="header">
+            <h2>Add Roles</h2>
+        </header>
+        <input type="text" id="firstName" placeholder="First Name">
+        <input type="text" id="lastName" placeholder="Last Name">
+        <input type="text" id="role" placeholder="Role">
+        <input type="text" id="access" placeholder="Access">
+        <button onclick="addRole()">Add Role</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Role</th>
+                <th>Access</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="roleTableBody">
+            <tr>
+                <td>1</td>
+                <td>Jerbe</td>
+                <td>Enorme</td>
+                <td>Manager</td>
+                <td>Entire System</td>
+                <td>
+                    <button onclick="editRole(this)">Edit</button>
+                    <button onclick="deleteRole(this)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        let userId = 2;
+
+        function addRole() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const role = document.getElementById('role').value;
+            const access = document.getElementById('access').value;
+
+            if (firstName && lastName && role && access) {
+                const tableBody = document.getElementById('roleTableBody');
+                const newRow = tableBody.insertRow();
+
+                newRow.insertCell(0).innerText = userId++;
+                newRow.insertCell(1).innerText = firstName;
+                newRow.insertCell(2).innerText = lastName;
+                newRow.insertCell(3).innerText = role;
+                newRow.insertCell(4).innerText = access;
+                const actionsCell = newRow.insertCell(5);
+                actionsCell.innerHTML = '<button onclick="editRole(this)">Edit</button> <button onclick="deleteRole(this)">Delete</button>';
+
+                document.getElementById('firstName').value = '';
+                document.getElementById('lastName').value = '';
+                document.getElementById('role').value = '';
+                document.getElementById('access').value = '';
+            } else {
+                alert('Please fill out all fields');
+            }
+        }
+
+        function deleteRole(button) {
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        function editRole(button) {
+            const row = button.parentNode.parentNode;
+            const cells = row.getElementsByTagName('td');
+
+            document.getElementById('firstName').value = cells[1].innerText;
+            document.getElementById('lastName').value = cells[2].innerText;
+            document.getElementById('role').value = cells[3].innerText;
+            document.getElementById('access').value = cells[4].innerText;
+
+            deleteRole(button);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 50px;
+            padding: 20px;
+            border: 2px solid black;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            background-color: whitesmoke;
+        }
+
+        header {
+            text-align: center;
+        }
+
+            header h1, h2 {
+                color: black;
+                font-weight: 300;
+            }
+
+            header p {
+                color: black;
+                font-weight: 300;
+            }
+
+        table {
+            width: 60%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            border-radius: 5px;
+            background-color: whitesmoke;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        th {
+            background-color: whitesmoke;
+        }
+
+        tr:nth-child(even) {
+            background-color: whitesmoke;
+        }
+
+        .form-container {
+            width: 40%;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid black;
+            border-radius: 8px;
+            background-color: whitesmoke;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .form-container input, .form-container button {
+                margin: 10px 0;
+                padding: 10px;
+                width: 70%;
+                border: 2px solid black;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+                border-radius: 5px;
+            }
+
+        input::placeholder {
+            color: black;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>User Management</h1>
+            <p>Manage user accounts, add new users, and edit existing user information.</p>
+        </header>
+    </div>
+
+    <div class="form-container">
+        <header class="header">
+            <h2>Add User</h2>
+        </header>
+        <input type="text" id="userid" placeholder="User ID">
+        <input type="text" id="firstName" placeholder="First Name">
+        <input type="text" id="lastName" placeholder="Last Name">
+        <input type="text" id="position" placeholder="Position">
+        <input type="text" id="salary" placeholder="Salary">
+        <input type="text" id="tax" placeholder="Tax">
+        <button onclick="addUser()">Add User</button>
+    </div>
+
+    <div class="form-container hidden" id="editForm">
+        <header class="header">
+            <h2>Edit User</h2>
+        </header>
+        <input type="text" id="editUserId" placeholder="User ID">
+        <input type="text" id="editFirstName" placeholder="First Name">
+        <input type="text" id="editLastName" placeholder="Last Name">
+        <input type="text" id="editPosition" placeholder="Position">
+        <input type="text" id="editSalary" placeholder="Salary">
+        <input type="text" id="editTax" placeholder="Tax">
+        <button onclick="updateUser()">Save Changes</button>
+        <button onclick="cancelEdit()">Cancel</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Position</th>
+                <th>Salary</th>
+                <th>Tax</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+            <tr>
+                <td>1</td>
+                <td>Jerbe</td>
+                <td>Enorme</td>
+                <td>Manager</td>
+                <td>100,000</td>
+                <td>10,000</td>
+                <td>
+                    <button onclick="editUser(this)">Edit</button>
+                    <button onclick="deleteUser(this)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            fetchUsers();
+        });
+
+        function fetchUsers() {
+            $.ajax({
+                url: 'http://localhost:3000/users',
+                method: 'GET',
+                dataType: 'json',
+                success: function (users) {
+                    const tableBody = $('#userTableBody');
+                    tableBody.empty(); // Clear existing rows
+                    users.forEach(function (user) {
+                        const newRow = $('<tr>');
+                        newRow.append('<td>' + user.userid + '</td>');
+                        newRow.append('<td>' + user.firstname + '</td>');
+                        newRow.append('<td>' + user.lastname + '</td>');
+                        newRow.append('<td>' + user.position + '</td>');
+                        newRow.append('<td>' + user.salary + '</td>');
+                        newRow.append('<td>' + user.tax + '</td>');
+                        const actionsCell = $('<td>');
+                        actionsCell.html('<button onclick="editUser(this)">Edit</button> <button onclick="deleteUser(this)">Delete</button>');
+                        newRow.append(actionsCell);
+                        tableBody.append(newRow);
+                    });
+                }
+            });
+        }
+
+        function addUser() {
+            const userid = $('#userid').val();
+            const firstName = $('#firstName').val();
+            const lastName = $('#lastName').val();
+            const position = $('#position').val();
+            const salary = $('#salary').val();
+            const tax = $('#tax').val();
+
+            if (userid && firstName && lastName && position && salary && tax) {
+                $.ajax({
+                    url: 'http://localhost:3000/users',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ userid, firstname: firstName, lastname: lastName, position, salary, tax }),
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            fetchUsers(); // Refresh the user table
+                        }
+                    }
+                });
+
+                // Clear input fields
+                $('#userid').val('');
+                $('#firstName').val('');
+                $('#lastName').val('');
+                $('#position').val('');
+                $('#salary').val('');
+                $('#tax').val('');
+            } else {
+                alert('Please fill out all fields');
+            }
+        }
+
+        function editUser(button) {
+            const row = $(button).closest('tr');
+            const userid = row.find('td:nth-child(1)').text();
+            // Other fields...
+
+            console.log('Editing user with ID:', userid); // Log the userid for verification
+
+            $('#editUserId').val(userid);
+            // Other fields...
+
+            $('#editForm').removeClass('hidden');
+        }
+
+        function editUser(button) {
+            const row = $(button).closest('tr');
+            const userid = row.find('td:nth-child(1)').text();
+            const firstName = row.find('td:nth-child(2)').text();
+            const lastName = row.find('td:nth-child(3)').text();
+            const position = row.find('td:nth-child(4)').text();
+            const salary = row.find('td:nth-child(5)').text();
+            const tax = row.find('td:nth-child(6)').text();
+
+            $('#editUserId').val(userid);
+            $('#editFirstName').val(firstName);
+            $('#editLastName').val(lastName);
+            $('#editPosition').val(position);
+            $('#editSalary').val(salary);
+            $('#editTax').val(tax);
+
+            $('#editForm').removeClass('hidden');
+        }
+
+        function updateUser() {
+            const userid = $('#editUserId').val();
+            const firstName = $('#editFirstName').val();
+            const lastName = $('#editLastName').val();
+            const position = $('#editPosition').val();
+            const salary = $('#editSalary').val();
+            const tax = $('#editTax').val();
+
+            if (userid && firstName && lastName && position && salary && tax) {
+                $.ajax({
+                    url: `http://localhost:3000/users/${userid}`, // Ensure userid is correctly appended
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ userid, firstname: firstName, lastname: lastName, position, salary, tax }),
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log("Update response:", data);
+                        if (data.success) {
+                            fetchUsers(); // Refresh the user table
+                            $('#editForm').addClass('hidden');
+                        } else {
+                            alert('Failed to update user: ' + (data.message || 'Unknown error'));
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Update error:", status, error);
+                        alert('Failed to update user');
+                    }
+                });
+            } else {
+                alert('Please fill out all fields');
+            }
+        }
+
+
+
+
+        function cancelEdit() {
+            $('#editForm').addClass('hidden');
+        }
+
+        function deleteUser(button) {
+            const row = $(button).closest('tr');
+            const userid = row.find('td:nth-child(1)').text();
+
+            $.ajax({
+                url: `http://localhost:3000/users/${userid}`,
+                method: 'DELETE',
+                success: function (data) {
+                    if (data.success) {
+                        fetchUsers(); // Refresh the user table
+                    } else {
+                        alert('Failed to delete user');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Delete error:", status, error);
+                    alert('Failed to delete user');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

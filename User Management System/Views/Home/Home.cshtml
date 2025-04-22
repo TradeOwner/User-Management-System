@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<main aria-labelledby="title">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Management System</title>
+
+        <style>
+
+
+
+            .main-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                width: 60%;
+                margin: 0 auto;
+                margin-top: 50px;
+                padding: 20px;
+                background-color: whitesmoke;
+                border: 2px solid black;
+                border-radius: 8px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            }
+
+            .container3, .container4, .container2 {
+                flex: 1;
+                margin: 10px;
+                padding: 20px;
+                border: 1px solid transparent;
+                border-radius: 8px;
+                background-color: whitesmoke;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            }
+
+          
+            header {
+                text-align: center;
+            }
+
+                .header h1 {
+                    color: black;
+                    font-weight: 500;
+                }
+
+                .header h2 {
+                    color: black;
+                    font-weight: 500;
+                }
+
+                .header h3 {
+                    color: black;
+                    font-weight: 500;
+                }
+
+                .header h4 {
+                    color: black;
+                    font-weight: 500;
+                }
+
+                header p {
+                    color: black;
+                    font-weight: 300;
+                }
+
+
+            .container1 {
+                width: 80%;
+                margin: 0 auto;
+                margin-top: 50px;
+                padding: 20px;
+                border: 2px solid black;
+                border-radius: 8px;
+                background-color: whitesmoke;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div class="container1">
+            <header class="header">
+                <h1>Welcome to User Management System</h1>
+                <p>Your one-stop solution for managing users, roles, and permissions.</p>
+            </header>
+        </div>
+
+
+        <div class="main-container">
+            <div class="container3">
+                <header class="header">
+                    <h3>Roles</h3>
+                    <p>Create and manage roles to assign different levels of access and permissions.</p>
+                </header>
+            </div>
+            <div class="container4">
+                <header class="header">
+                    <h4>Permissions</h4>
+                    <p>Set up and manage permissions to control what users can and cannot do.</p>
+                </header>
+            </div>
+            <div class="container2">
+                <header class="header">
+                    <h2>Users</h2>
+                    <p>Manage user accounts, add new users, and edit existing user information.</p>
+                </header>
+            </div>
+        </div>
+
+
+        <script>
+            document.querySelectorAll('.navbar-menu').forEach(link => {
+                link.addEventListener('click', function (event) {
+                    window.location.href = link.getAttribute('href');
+                });
+            });
+        </script>
+    </body>
+</html>
+</main>

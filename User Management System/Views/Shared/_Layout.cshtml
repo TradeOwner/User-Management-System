@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - User Management System</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+
+        body {
+            min-height: 100vh;
+            background: url("https://i.ibb.co/Lv58HBc/bg.png") no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: black;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            align-content: center;  
+        }
+
+        .navbar-menu {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: auto;
+            align-content: center;
+        }
+
+        
+
+        .navbar-menu li {
+            margin: 0 10px;
+            align-content: center;
+        }
+
+            .navbar-menu li a {
+                font-size: 1.15rem;
+                color: #fff;
+                text-decoration: none;
+                font-weight: 500;
+                margin-left: 2.5rem;
+            }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="navbar-menu">
+            <li>@Html.ActionLink("Home", "Home", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+            <li>@Html.ActionLink("Manage Users", "ManageUsers", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+            <li>@Html.ActionLink("Manage Roles", "Roles", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+            <li>@Html.ActionLink("Profile", "Profile", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+            <li>@Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+        </ul>
+    </nav>
+    @RenderBody()
+   
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
